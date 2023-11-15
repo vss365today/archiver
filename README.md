@@ -10,7 +10,7 @@
 - API_DOMAIN
 - DIST_PATH
 - SITE_DOMAIN
-- DOCKER_SECRETS_PATH (in env)
+- SYS_VARS_PATH (in env)
 
 
 ## Usage
