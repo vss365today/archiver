@@ -10,7 +10,7 @@ def current_year(_: str) -> str:
 
 
 def get_site_domain(_: str) -> str:
-    return sys_vars.get("SITE_DOMAIN")
+    return sys_vars.get("DIST_DOMAIN")
 
 
 ALL_FILTERS: list[Callable] = [
