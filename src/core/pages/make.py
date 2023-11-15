@@ -7,6 +7,24 @@ import sys_vars
 from jinja2 import Environment
 
 
+__all__ = ["dist", "render", "page", "search_json"]
+
+
+def dist(dir_names: list[dict[str, list[int]]]) -> None:
+    dist_path = sys_vars.get_path("DIST_PATH")
+
+    # Create the prompts years and months folders
+    for item in dir_names:
+        for year, months in item.items():
+            for month in months:
+                (dist_path / "browse" / year / str(month)).mkdir(parents=True, exist_ok=True)
+
+    # Create the site static files folders and files
+    src_path = Path() / "src" / "static"
+    shutil.copytree(fspath(src_path), fspath(dist_path / "static"), dirs_exist_ok=True)
+    (dist_path / "static" / "images").mkdir(parents=True, exist_ok=True)
+
+
 def render(
     name: str,
     render_opts: dict,
@@ -16,8 +34,12 @@ def render(
     return template.render(**render_opts)
 
 
+def page(*args: str, data: str = "") -> None:
+    (sys_vars.get_path("DIST_PATH").joinpath(*args)).write_bytes(data.encode())
+
+
 def search_json(data: dict) -> None:
-    json_file = sys_vars.get_path("DIST_PATH") / "js" / "search.js"
+    json_file = sys_vars.get_path("DIST_PATH") / "js" / "prompts.js"
     str_data = json.dumps(data)
 
     # After we stringify the JSON data, append the following
@@ -28,7 +50,3 @@ def search_json(data: dict) -> None:
     # Do that instead
     str_data = f"export default {str_data}"
     json_file.write_text(str_data)
-
-
-def page(*args: str, data: str = ""):
-    (sys_vars.get_path("DIST_PATH").joinpath(*args)).write_bytes(data.encode())
