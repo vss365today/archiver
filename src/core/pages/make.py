@@ -30,7 +30,7 @@ def render(
     render_opts: dict,
     jinja: Environment,
 ) -> str:
-    template = jinja.get_template(f"{name}.jinja2")
+    template = jinja.get_template(f"{name}.html")
     return template.render(**render_opts)
 
 

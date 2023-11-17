@@ -2,8 +2,7 @@ from time import time
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-from src.core import pages
-from src.helpers import api, filters
+from src.core import api, context_vars, filters, pages
 
 
 def main() -> None:
@@ -15,9 +14,10 @@ def main() -> None:
         autoescape=select_autoescape(["html"]),
     )
 
-    # Register any custom filters
+    # Register any custom filters and context vals
     for f in filters.ALL_FILTERS:
         env.filters[f.__name__] = f
+    env.globals.update(context_vars.ALL_CONTEXT_VARS)
 
     # Set up the prompt years and months directories in the dist folder
     prompt_years = api.get("browse", "years")["years"]
