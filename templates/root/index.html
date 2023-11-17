@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% set page_title = prompts[0].date|format_date_pretty %}
+
+{% block content %}
+<section class="content">
+  {% include "partials/btns-prev-next.html" %}
+
+  {% set number_of_prompts = prompts|length %}
+  <h3 class="prompt-highlight center">Today's writing prompt{{ ' is' if number_of_prompts == 1 else 's are' }}:</h3>
+    <p class="word-wrapper center">
+      {% for prompt in prompts %}
+      <span class="prompt-highlight word commas center">{{ prompt.word }}</span>
+      {% endfor %}
+
+      {% for prompt in prompts %}
+      <div class="center">
+        {{ '<span>'|safe ~ prompt.word ~ ':</span>'|safe if number_of_prompts >= 2 }}
+        <a class="center" target="_blank" href="https://www.dictionary.com/browse/{{ prompt.word|lower }}">Dictionary.com</a>
+        <a class="center" target="_blank" href="https://www.merriam-webster.com/dictionary/{{ prompt.word|lower }}">Merriam-Webster</a>
+      </div>
+      {% endfor %}
+    </p>
+  </section>
+
+  <section class="content">
+    {% for prompt in prompts %}
+    <div class="tweet">
+      {% for media in prompt.media %}
+      <img width="400" alt="{{ media.alt_text if media.alt_text }}" src="{{ url_for('static', filename='images/' ~ media.file) }}">
+      {% endfor %}
+  </div>
+  {% endfor %}
+
+  {% if prompts|length > 1 %}
+  <p class="center" style="font-size: 0.85em;">Prompt {% for prompt in prompts %}
+    <a class="commas" href="{{ prompt.url }}">{{ loop.index }}</a>
+  {% endfor %} by {{ prompts[0].host.handle }}</p>
+  {% else %}
+  <p class="center" style="font-size: 0.85em;"><a href="{{ prompts[0].url }}">Prompt by {{ prompts[0].host.handle }}</a></p>
+  {% endif %}
+</section>
+
+<section class="content">
+  <details>
+    <summary>View tweet{{ 's' if number_of_prompts > 1 }}</summary>
+    {% for prompt in prompts %}
+    {{ prompt.content|format_content }}
+    {% endfor %}
+  </details>
+</section>
+{% endblock %}

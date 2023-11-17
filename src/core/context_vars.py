@@ -45,9 +45,9 @@ def url_for(
                 "index": "/",
                 "browse": "/browse",
                 "about": "/about",
-                "view_date": "",
-                "browse_by_year": "",
-                "browse_by_year_month": "",
+                "view_date": "/view/{d}",
+                "browse_by_year": "/browse/{year}",
+                "browse_by_year_month": "/browse/{year}/{month}",
             },
             "search": {
                 "index": "/search",
@@ -56,15 +56,28 @@ def url_for(
             },
             "stats": {
                 "index": "/stats",
-                "year": "/stats/",
+                "year": "/stats/{year}",
             },
         }
+
+        # Handle non-static routing
         if "." in endpoint:
             root, page = endpoint.split(".")
+
+            # We don't have that endpoint mapped
             if root not in mapping:
                 raise NotImplementedError(f"Unsupported endpoint: {endpoint!r}")
 
+            # Get the resulting URL
             final_url = mapping[root][page]
+
+            # HACK way to determine if this URL has variable data. If so,
+            # render it in and reset `values` so we don't end up with query strings too
+            if "{" in final_url and "}" in final_url:
+                final_url = final_url.format_map(values)
+                values = {}
+
+        # We don't support this non-static route
         else:
             raise NotImplementedError(f"Unsupported endpoint: {endpoint!r}")
 

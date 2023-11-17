@@ -1,10 +1,30 @@
 import re
 from html import unescape
+from math import floor
 
 import markupsafe
 
 
-__all__ = ["format_content", "get_all_hashtags", "make_hashtags", "make_mentions", "make_urls"]
+__all__ = [
+    "format_content",
+    "get_all_hashtags",
+    "make_hashtags",
+    "make_mentions",
+    "make_urls",
+    "duration",
+]
+
+
+def duration(seconds: int) -> str:
+    # https://stackoverflow.com/a/3856312
+    hours = floor(seconds / 3600)
+    mins = floor(seconds / 60 % 60)
+    secs = floor(seconds % 60)
+
+    # Only display the hours if needed
+    if hours > 0:
+        return f"{hours:02d}:{mins:02d}:{secs:02d}"
+    return f"{mins:02d}:{secs:02d}"
 
 
 def format_content(text: str) -> str:

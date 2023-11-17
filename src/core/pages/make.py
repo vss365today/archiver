@@ -24,6 +24,9 @@ def dist(dir_names: list[dict[str, list[int]]]) -> None:
     shutil.copytree(fspath(src_path), fspath(dist_path / "static"), dirs_exist_ok=True)
     (dist_path / "static" / "images").mkdir(parents=True, exist_ok=True)
 
+    # Make the view directory that will hold all of the prompts
+    (dist_path / "view").mkdir(exist_ok=True)
+
 
 def render(
     name: str,

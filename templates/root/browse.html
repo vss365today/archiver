@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% set page_title = 'Browse #vss365 prompts' %}
+
+{% block content %}
+<section class="page browse-page">
+  <h2 class="center">&OpenCurlyDoubleQuote;Those who forget history are doomed to repeat it.&CloseCurlyDoubleQuote;
+    <br>&mdash; Edmund Burke
+  </h2>
+  <p>Did you miss a #vss365 prompt? Would you like to view the previously tweeted daily prompts and perhaps gain some writing inspiration? You've come to the right place! Here, you can view as many prompts as your writer's heart pleases. If you need more focused browsing, consider using the <a href="{{ url_for('search.index') }}">search</a>. Happy browsing!</p>
+
+  <div class="wrapper">
+    <h2>Browse by year</h2>
+    {% for year in years -%}
+    <a class="a-btn" href="{{ url_for('root.browse_by_year', year=year) }}">{{ year }}</a>
+    {% endfor %}
+  </div>
+
+  <h2 class="center">Download the complete archive!</h2>
+  <p>The complete #vss365 word archive is now available in a single location! Download an Excel spreadsheet with every word ever used since the beginning of the prompt, perfect for data analysis, hosting preparation, or writing inspiration! It is updated daily, so you always have access to the latest words.</p>
+
+  <div class="wrapper">
+    {% if archive is not none %}
+    <a class="a-btn" download="{{ archive.file }}" href="{{ url_for('static', filename='downloads/' ~ archive.file_name) }}">Download the archive!</a>
+    {% else %}
+    <div class="a-btn">Archive currently unavailable 😕</div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

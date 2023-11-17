@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% set page_title = year ~ ' #vss365 prompts' %}
+
+{% block content %}
+<section class="page center browse-giver">
+  <h2 class="center">&OpenCurlyDoubleQuote;
+    Actually, years mean nothing. It's what's inside them.&CloseCurlyDoubleQuote;
+    <br>&mdash;<a rel="nofollow noopener noreferrer" href="https://www.goodreads.com/quotes/478606-actually-years-mean-nothing-it-s-what-s-inside-them">Simon Van Booy</a>
+  </h2>
+
+  <div class="wrapper">
+    {%- for date in months %}
+    <a class="a-btn" href="{{ url_for('root.browse_by_year_month', year=date.year, month=date.month) }}">{{ date|format_month_year }}</a>
+    {%- if loop.index % 6 == 0 %}
+  </div>
+
+  <div class="wrapper">
+    {%- endif %}
+    {%- endfor %}
+  </div>
+</section>
+{% endblock %}
