@@ -2,17 +2,9 @@ import re
 from html import unescape
 
 import markupsafe
-import sys_vars
 
 
-__all__ = [
-    "format_content",
-    "get_all_hashtags",
-    "get_static_url",
-    "make_hashtags",
-    "make_mentions",
-    "make_urls",
-]
+__all__ = ["format_content", "get_all_hashtags", "make_hashtags", "make_mentions", "make_urls"]
 
 
 def format_content(text: str) -> str:
@@ -35,11 +27,6 @@ def format_content(text: str) -> str:
 
 def get_all_hashtags(text: str) -> tuple:
     return tuple(re.findall(r"(#\w+)", text, re.I))
-
-
-def get_static_url(filename: str) -> str:
-    """Generate a URL to static assets based on dev/prod status."""
-    return f"{sys_vars.get('STATIC_FILES_URL')}/{filename}"
 
 
 def make_hashtags(text: str) -> str:

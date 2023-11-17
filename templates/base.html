@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{ page_title }} | #vss365 today</title>
+  {% include "partials/social-media.html" %}
+
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Josefin+Slab:wght@400;600;700&family=Karla:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+  {%- block styles %}{% endblock %}
+</head>
+
+<body>
+  {% include 'partials/alerts.jinja2' %}
+
+  {% include 'partials/header.html' %}
+
+  <main id="main">
+    {%- block content %}{% endblock %}
+  </main>
+
+  {% include 'partials/footer.html' %}
+
+  <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='js/alerts.js') }}"></script>
+  {%- block scripts %}{% endblock %}
+</body>
+</html>
