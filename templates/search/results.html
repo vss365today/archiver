@@ -10,22 +10,7 @@
     Say "<span class="header-query"></span>" <span class="header-total"></span> <span class="header-fast"></span>. That's how cool the prompt is!
   </h2>
 
-  <div class="wrapper">
-    {#
-    {% for prompt in prompts %}
-    <dl>
-      <dd><a href="{{ url_for('root.view_date', d=prompt.date) }}">{{ prompt.word }}</a></dd>
-      <dt>{{ prompt.date|format_date_pretty }}</dt>
-      <dt>{{ prompt.host }}</dt>
-    </dl>
-    {%- if loop.index % 5 == 0 %}
-  </div>
-
-  <div class="wrapper">
-    {%- endif %}
-    {%- endfor %}
-  </div>
-  #}
+  <span class="prompts-here"></span>
 
   {% include "partials/form-search.html" %}
 </section>

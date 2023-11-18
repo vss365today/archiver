@@ -1,6 +1,24 @@
 // @ts-ignore
 import { searchData } from "./prompts.js";
 
+function renderPrompts(prompts) {
+  let finalHTML = ['<div class="wrapper">'];
+  prompts.forEach((prompt, i) => {
+    let t = `<dl>
+      <dd><a href="{{ url_for('root.view_date', d=prompt.date) }}">${prompt.word}</a></dd>
+      <dt>${prompt.pretty_date}</dt>
+      <dt>${prompt.host.handle}</dt>
+    </dl>`;
+    finalHTML.push(t);
+
+    // Only five items per column
+    if ((i + 1) % 5 === 0) {
+      finalHTML.push('</div><div class="wrapper">');
+    }
+  });
+  return finalHTML.join("");
+}
+
 function searchDates(query) {
   // Redirect to the view page for this date or 404 page if it's not recorded
   return () => {
@@ -11,18 +29,13 @@ function searchDates(query) {
 }
 
 function searchHosts(query) {
-  function render(p) {}
-
-  let foundPrompts = {
-    render,
-    prompts: [],
-  };
+  let foundPrompts = [];
 
   // Find the prompts from this host
   for (let prompts of Object.values(searchData)) {
     prompts.forEach((v) => {
       if (v.host.handle === query) {
-        foundPrompts.prompts.push(v);
+        foundPrompts.push(v);
       }
     });
   }
@@ -31,13 +44,7 @@ function searchHosts(query) {
 }
 
 function searchPrompts(query) {
-  function render(p) {}
-
-  let foundPrompts = {
-    render,
-    prompts: [],
-  };
-
+  let foundPrompts = [];
 }
 
 document.addEventListener("DOMContentLoaded", function (e) {
@@ -64,15 +71,25 @@ document.addEventListener("DOMContentLoaded", function (e) {
     let r = searchHosts(searchQuery);
     console.log(r);
     // @ts-ignore
-    headline.querySelector(".header-total").textContent = r.prompts.length.toString();
+    headline.querySelector(".header-total").textContent = r.length.toString();
     // @ts-ignore
-    headline.querySelector(".header-plural").textContent = r.prompts.length ? "s": "";
+    headline.querySelector(".header-plural").textContent = r.length ? "s" : "";
 
+    let content = renderPrompts(r);
+    document
+      .querySelector(".page .prompts-here")
+      ?.insertAdjacentHTML("afterbegin", content);
   } else if (searchType === "word") {
     let r = searchPrompts(searchQuery);
     // @ts-ignore
-    headline.querySelector(".header-fast").textContent = r.prompts.length ? "times fast": "time";
+    headline.querySelector(".header-fast").textContent = r.length
+      ? "times fast"
+      : "time";
 
+    let content = renderPrompts(r);
+    document
+      .querySelector(".page .prompts-here")
+      ?.insertAdjacentHTML("afterbegin", content);
   } else if (searchType === "date") {
     searchDates(searchQuery)();
   }
