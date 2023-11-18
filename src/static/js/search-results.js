@@ -25,16 +25,8 @@ function searchError(message) {
 }
 
 function searchDates(query) {
-  // Handle too short queries
-  if (!query) {
-    return null;
-  }
-
   // Redirect to the view page for this date or 404 page if it's not recorded
-  return Object.keys(searchData).includes(query)
-      ? `/view/${query}`
-      : "/404";
-  };
+  return Object.keys(searchData).includes(query) ? `/view/${query}` : "/404";
 }
 
 function searchHosts(query) {
@@ -92,8 +84,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
   // Handle an unsupported search type
   // @ts-ignore
-  if (!["date", "host","word"].includes(searchType)) {
-    searchError("Something happened and we couldn't search that. Please try again.");
+  if (!["date", "host", "word"].includes(searchType)) {
+    searchError(
+      "Something happened and we couldn't search that. Please try again."
+    );
   }
 
   // Show the proper page headline depending on the search type
@@ -108,13 +102,22 @@ document.addEventListener("DOMContentLoaded", function (e) {
   // @ts-ignore
   headline.querySelector(".header-query").textContent = searchQuery;
 
-  // Determine the correct search function
   if (searchType === "host") {
+    // Handle no host name
+    if (!searchQuery) {
+      searchError("A Host name must be provided to search.");
+    }
+
     let r = searchHosts(searchQuery);
 
     // Handle no results
     if (r.length === 0) {
       searchError(`No prompts from ${searchQuery} could be found.`);
+    }
+
+    // If we only got one result, go straight to it
+    if (r.length === 1) {
+      window.location = `/view/${r[0].date}`;
     }
 
     // @ts-ignore
@@ -127,12 +130,23 @@ document.addEventListener("DOMContentLoaded", function (e) {
       .querySelector(".page .prompts-here")
       ?.insertAdjacentHTML("afterbegin", content);
   } else if (searchType === "word") {
+    // Handle no word
+    if (!searchQuery) {
+      searchError(
+        `We were unable to find prompts containing '${searchQuery}'. Please try using a different term.`
+      );
+    }
+
     let r = searchPrompts(searchQuery);
 
     // Handle no results
-    // TODO: Fix the site then fix this
     if (r.length === 0) {
-      // searchError(`No prompts from ${searchQuery} could be found.`);
+      searchError(`No prompts containing ${searchQuery} could be found.`);
+    }
+
+    // If we only got one result, go straight to it
+    if (r.length === 1) {
+      window.location = `/view/${r[0].date}`;
     }
 
     // @ts-ignore
@@ -146,14 +160,14 @@ document.addEventListener("DOMContentLoaded", function (e) {
     document
       .querySelector(".page .prompts-here")
       ?.insertAdjacentHTML("afterbegin", content);
-
   } else if (searchType === "date") {
-    let r = searchDates(searchQuery);
-
-    if (r === null) {
-      searchError(`"We were unable to find a prompt for ${searchQuery}. Please select a different date.`);
-    } else {
-      window.location = r;
+    // Handle no date given
+    if (!searchQuery) {
+      searchError(
+        `"We were unable to find a prompt for ${searchQuery}. Please select a different date.`
+      );
     }
+
+    window.location = searchDates(searchQuery);
   }
 });
