@@ -173,7 +173,14 @@ def main() -> None:
     )
 
     print("Making searchable content...")
-    render_opts = {"prompts": json.dumps(all_prompts)}
+    json_prompts = copy.deepcopy(all_prompts)
+
+    # Add a pretty date field to each prompt
+    for prompts in json_prompts.values():
+        for p in prompts:
+            p["pretty_date"] = filters.format_date_pretty(p["date"])
+
+    render_opts = {"prompts": json.dumps(json_prompts)}
     pages.make.page(
         "static/js/prompts.js", data=pages.make.render("search/prompts.js", render_opts, env)
     )

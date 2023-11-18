@@ -19,6 +19,11 @@ function renderPrompts(prompts) {
   return finalHTML.join("");
 }
 
+function searchError(message) {
+  // TODO: Error message
+  window.location = "/search";
+}
+
 function searchDates(query) {
   // Redirect to the view page for this date or 404 page if it's not recorded
   return () => {
@@ -39,18 +44,33 @@ function searchHosts(query) {
       }
     });
   }
-
   return foundPrompts;
 }
 
 function searchPrompts(query) {
   let foundPrompts = [];
+
+  // Handle too short queries
+  if (!query || query.length === 1) {
+    return foundPrompts;
+  }
+
+  // Find the prompts containing the search query
+  let regexp = new RegExp(query, "i");
+  for (let prompts of Object.values(searchData)) {
+    prompts.forEach((v) => {
+      if (regexp.test(v.word)) {
+        foundPrompts.push(v);
+      }
+    });
+  }
+  return foundPrompts;
 }
 
 document.addEventListener("DOMContentLoaded", function (e) {
   let qs = new URL(window.location.toString()).searchParams;
   let searchType = qs.get("type");
-  let searchQuery = qs.get("query")?.toString();
+  let searchQuery = qs.get("query")?.toString().trim();
   let headline = null;
 
   // Show the proper page headline depending on the search type
@@ -66,10 +86,14 @@ document.addEventListener("DOMContentLoaded", function (e) {
   headline.querySelector(".header-query").textContent = searchQuery;
 
   // Determine the correct search function
-  let searchFunction = (query) => {};
   if (searchType === "host") {
     let r = searchHosts(searchQuery);
-    console.log(r);
+
+    // Handle no results
+    if (r.length === 0) {
+      searchError(`No prompts from ${searchQuery} could be found.`);
+    }
+
     // @ts-ignore
     headline.querySelector(".header-total").textContent = r.length.toString();
     // @ts-ignore
@@ -81,6 +105,15 @@ document.addEventListener("DOMContentLoaded", function (e) {
       ?.insertAdjacentHTML("afterbegin", content);
   } else if (searchType === "word") {
     let r = searchPrompts(searchQuery);
+
+    // Handle no results
+    // TODO: Fix the site then fix this
+    if (r.length === 0) {
+      // searchError(`No prompts from ${searchQuery} could be found.`);
+    }
+
+    // @ts-ignore
+    headline.querySelector(".header-total").textContent = r.length.toString();
     // @ts-ignore
     headline.querySelector(".header-fast").textContent = r.length
       ? "times fast"
