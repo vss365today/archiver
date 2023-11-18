@@ -40,6 +40,10 @@ def main() -> None:
         "search/index.html", data=pages.make.render("search/search.html", render_opts, env)
     )
 
+    # Create the about page
+    print("Making about page...")
+    pages.make.page("about/index.html", data=pages.make.render("root/about.html", {}, env))
+
     # Make the root browse page
     print("Making root browse page...")
     try:
