@@ -24,17 +24,15 @@ def dist(dir_names: list[dict[str, list[int]]]) -> None:
     shutil.copytree(fspath(src_path), fspath(dist_path / "static"), dirs_exist_ok=True)
     (dist_path / "static" / "images").mkdir(parents=True, exist_ok=True)
 
-    # Make the view directory that will hold all of the prompts
+    # Make various static directories
+    (dist_path / "about").mkdir(exist_ok=True)
+    (dist_path / "search").mkdir(exist_ok=True)
+    (dist_path / "stats").mkdir(exist_ok=True)
     (dist_path / "view").mkdir(exist_ok=True)
 
 
-def render(
-    name: str,
-    render_opts: dict,
-    jinja: Environment,
-) -> str:
-    template = jinja.get_template(f"{name}.html")
-    return template.render(**render_opts)
+def render(name: str, render_opts: dict, jinja: Environment) -> str:
+    return jinja.get_template(name).render(**render_opts)
 
 
 def page(*args: str, data: str = "") -> None:

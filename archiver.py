@@ -36,7 +36,9 @@ def main() -> None:
         "page_title": "Search #vss365 prompts",
         "hosts": [r["handle"] for r in api.get("hosts/")],
     }
-    pages.make.page("search.html", data=pages.make.render("search/search", render_opts, env))
+    pages.make.page(
+        "search/index.html", data=pages.make.render("search/search.html", render_opts, env)
+    )
 
     # Make the root browse page
     print("Making root browse page...")
@@ -45,9 +47,9 @@ def main() -> None:
     except HTTPError:
         archive_name = None
     pages.make.page(
-        "browse.html",
+        "browse/index.html",
         data=pages.make.render(
-            "root/browse", {"years": prompt_years, "archive": archive_name}, env
+            "root/browse.html", {"years": prompt_years, "archive": archive_name}, env
         ),
     )
 
@@ -64,7 +66,7 @@ def main() -> None:
             pages.make.page(
                 f"browse/{year}/index.html",
                 data=pages.make.render(
-                    "root/browse-year", {"year": year, "months": month_objs}, env
+                    "root/browse-year.html", {"year": year, "months": month_objs}, env
                 ),
             )
 
@@ -83,28 +85,11 @@ def main() -> None:
                 pages.make.page(
                     f"browse/{year}/{date_obj.month}/index.html",
                     data=pages.make.render(
-                        "root/browse-month",
+                        "root/browse-month.html",
                         {"date": date_obj, "month_prompts": prompts_in_month},
                         env,
                     ),
                 )
-
-    # Next, we are going to generate a site index, which is the newest prompt
-    print("Making site index...")
-    newest_prompts = all_prompts[max(all_prompts.keys())]
-    for p in newest_prompts:
-        p["date"] = date.fromisoformat(p["date"])
-
-    render_opts = {
-        "prompts": newest_prompts,
-        "previous": (
-            date.fromisoformat(newest_prompts[0]["navigation"]["previous"])
-            if newest_prompts[0]["navigation"]["previous"]
-            else None
-        ),
-        "next": None,
-    }
-    pages.make.page("index.html", data=pages.make.render("root/index", render_opts, env))
 
     # Next, pull out the special One Year page, which is different from the rest
     print("Making One Year page...")
@@ -116,8 +101,46 @@ def main() -> None:
         "next": date.fromisoformat(one_year_prompt["navigation"]["next"]),
     }
     pages.make.page(
-        "view/2017-09-05.html", data=pages.make.render("root/one-year", render_opts, env)
+        "view/2017-09-05.html", data=pages.make.render("root/one-year.html", render_opts, env)
     )
+
+    print("Making individual view pages...")
+    for day, prompts in all_prompts.items():
+        # Create the required date object
+        for prompt in prompts:
+            prompt["date"] = date.fromisoformat(prompt["date"])
+
+        print(f"Making view page for {day}...")
+        render_opts = {
+            "prompts": prompts,
+            "previous": (
+                date.fromisoformat(prompts[0]["navigation"]["previous"])
+                if prompts[0]["navigation"]["previous"]
+                else None
+            ),
+            "next": (
+                date.fromisoformat(prompts[0]["navigation"]["next"])
+                if prompts[0]["navigation"]["next"]
+                else None
+            ),
+        }
+        pages.make.page(
+            f"view/{day}.html", data=pages.make.render("root/index.html", render_opts, env)
+        )
+
+    # Next, we are going to generate a site index, which is the newest prompt
+    print("Making site index...")
+    newest_prompts = all_prompts[max(all_prompts.keys())]
+    render_opts = {
+        "prompts": newest_prompts,
+        "previous": (
+            date.fromisoformat(newest_prompts[0]["navigation"]["previous"])
+            if newest_prompts[0]["navigation"]["previous"]
+            else None
+        ),
+        "next": None,
+    }
+    pages.make.page("index.html", data=pages.make.render("root/index.html", render_opts, env))
 
 
     # Provide a basic "how long did it run" recording
