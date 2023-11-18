@@ -3,14 +3,15 @@
 
 {% block content %}
 <section class="page search-results center">
-  {#
-  {% if search_type == 'host' %}
-  <h2 class="center">{{ query }} has given us {{ total }} awesome {{ 'prompts' if total > 1 else 'prompt' }}!</h2>
-  {% else %}
-  <h2 class="center">Say "{{ query }}" {{ total }} {{ 'times fast' if total > 1 else 'time' }}. That's how cool the prompt is!</h2>
-  {% endif %}
+  <h2 class="header-host center hidden">
+   <span class="header-query"></span>  has given us {# {{ total }} awesome {{ 'prompts' if total > 1 else 'prompt' }}! #}
+  </h2>
+  <h2 class="header-not-host center hidden">
+    Say "<span class="header-query"></span>" {# {{ total }} {{ 'times fast' if total > 1 else 'time' }} #}. That's how cool the prompt is!
+  </h2>
 
   <div class="wrapper">
+    {#
     {% for prompt in prompts %}
     <dl>
       <dd><a href="{{ url_for('root.view_date', d=prompt.date) }}">{{ prompt.word }}</a></dd>

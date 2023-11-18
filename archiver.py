@@ -171,6 +171,10 @@ def main() -> None:
         "search/results.html", data=pages.make.render("search/results.html", render_opts, env)
     )
 
+    print("Making searchable content...")
+    pages.make.page("static/js/prompts.js", data=pages.make.render("search/prompts.js", {}, env))
+
+
     # Provide a basic "how long did it run" recording
     total_time = time() - start_time
     print(f"{total_time}=")

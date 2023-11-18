@@ -207,6 +207,9 @@ footer > div {
   margin-right: auto;
   margin-left: auto;
 }
+.hidden {
+  display: none;
+}
 
 .page {
   width: 65%;
