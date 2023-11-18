@@ -4,10 +4,10 @@
 {% block content %}
 <section class="page search-results center">
   <h2 class="header-host center hidden">
-   <span class="header-query"></span>  has given us {# {{ total }} awesome {{ 'prompts' if total > 1 else 'prompt' }}! #}
+   <span class="header-query"></span>  has given us <span class="header-total"></span> awesome prompt<span class="header-plural"></span>!
   </h2>
   <h2 class="header-not-host center hidden">
-    Say "<span class="header-query"></span>" {# {{ total }} {{ 'times fast' if total > 1 else 'time' }} #}. That's how cool the prompt is!
+    Say "<span class="header-query"></span>" <span class="header-total"></span> <span class="header-fast"></span>. That's how cool the prompt is!
   </h2>
 
   <div class="wrapper">

@@ -25,6 +25,7 @@
   </form>
 
   <form class="form-search host" method="GET" action="{{ url_for('search.do_search') }}">
+    <input id="type" name="type" type="hidden" value="host">
     <select name="query" id="input-search-host">
       <option value=""></option>
       {% for host in hosts %}<option value="{{ host }}">{{ host }}</option>{% endfor %}

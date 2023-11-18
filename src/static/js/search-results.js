@@ -1,27 +1,52 @@
 // @ts-ignore
-import * as searchData from "./prompts.js";
+import { searchData } from "./prompts.js";
 
 function searchDates(query) {
-  let promptDates = Object.keys(searchData.prompts);
+  // Redirect to the view page for this date or 404 page if it's not recorded
+  return () => {
+    window.location = Object.keys(searchData).includes(query)
+      ? `/view/${query}`
+      : "/404";
+  };
+}
 
-  // That date is not recorded
-  if (!promptDates.includes(query)) {
-    return () => {};
+function searchHosts(query) {
+  function render(p) {}
+
+  let foundPrompts = {
+    render,
+    prompts: [],
+  };
+
+  // Find the prompts from this host
+  for (let prompts of Object.values(searchData)) {
+    prompts.forEach((v) => {
+      if (v.host.handle === query) {
+        foundPrompts.prompts.push(v);
+      }
+    });
   }
 
-  // Redirect to the view page for this date
-  return () => { window.location = `/view/${query}` };
+  return foundPrompts;
 }
-function searchHosts(query) {}
-function searchPrompts(query) {}
 
+function searchPrompts(query) {
+  function render(p) {}
 
-document.addEventListener("DOMContentLoaded", function(e) {
+  let foundPrompts = {
+    render,
+    prompts: [],
+  };
+
+}
+
+document.addEventListener("DOMContentLoaded", function (e) {
   let qs = new URL(window.location.toString()).searchParams;
   let searchType = qs.get("type");
+  let searchQuery = qs.get("query")?.toString();
   let headline = null;
 
-    // Show the proper page headline depending on the search type
+  // Show the proper page headline depending on the search type
   if (searchType === "host") {
     headline = document.querySelector("h2.header-host");
   } else {
@@ -31,20 +56,24 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
   // Display the query in the headline
   // @ts-ignore
-  headline.querySelector(".header-query").textContent = qs.get("query");
+  headline.querySelector(".header-query").textContent = searchQuery;
 
   // Determine the correct search function
-  let searchFunction = null;
+  let searchFunction = (query) => {};
   if (searchType === "host") {
-    searchFunction = searchHosts;
-  } else if (searchType === "word") {
-    searchFunction = searchPrompts;
-  } else if (searchType === "date") {
-    searchFunction = searchDates;
-  } else {
-    searchFunction = () => { () => {} };
-  }
+    let r = searchHosts(searchQuery);
+    console.log(r);
+    // @ts-ignore
+    headline.querySelector(".header-total").textContent = r.prompts.length.toString();
+    // @ts-ignore
+    headline.querySelector(".header-plural").textContent = r.prompts.length ? "s": "";
 
-  console.log(searchData.hosts);
- searchFunction(qs.get("query"))();
+  } else if (searchType === "word") {
+    let r = searchPrompts(searchQuery);
+    // @ts-ignore
+    headline.querySelector(".header-fast").textContent = r.prompts.length ? "times fast": "time";
+
+  } else if (searchType === "date") {
+    searchDates(searchQuery)();
+  }
 });
