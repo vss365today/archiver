@@ -25,9 +25,13 @@ function searchError(message) {
 }
 
 function searchDates(query) {
+  // Handle too short queries
+  if (!query) {
+    return null;
+  }
+
   // Redirect to the view page for this date or 404 page if it's not recorded
-  return () => {
-    window.location = Object.keys(searchData).includes(query)
+  return Object.keys(searchData).includes(query)
       ? `/view/${query}`
       : "/404";
   };
@@ -82,9 +86,15 @@ function searchPrompts(query) {
 
 document.addEventListener("DOMContentLoaded", function (e) {
   let qs = new URL(window.location.toString()).searchParams;
-  let searchType = qs.get("type");
+  let searchType = qs.get("type")?.toString().trim();
   let searchQuery = qs.get("query")?.toString().trim();
   let headline = null;
+
+  // Handle an unsupported search type
+  // @ts-ignore
+  if (!["date", "host","word"].includes(searchType)) {
+    searchError("Something happened and we couldn't search that. Please try again.");
+  }
 
   // Show the proper page headline depending on the search type
   if (searchType === "host") {
@@ -136,7 +146,14 @@ document.addEventListener("DOMContentLoaded", function (e) {
     document
       .querySelector(".page .prompts-here")
       ?.insertAdjacentHTML("afterbegin", content);
+
   } else if (searchType === "date") {
-    searchDates(searchQuery)();
+    let r = searchDates(searchQuery);
+
+    if (r === null) {
+      searchError(`"We were unable to find a prompt for ${searchQuery}. Please select a different date.`);
+    } else {
+      window.location = r;
+    }
   }
 });
