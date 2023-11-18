@@ -51,8 +51,8 @@ def url_for(
             },
             "search": {
                 "index": "/search",
-                "results": "/search",
-                "do_search": "/search/do",
+                "results": "/search/results",
+                "do_search": "/search/results",
             },
             "stats": {
                 "index": "/stats",
