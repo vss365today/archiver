@@ -36,15 +36,6 @@ def main() -> None:
     pages.make.page("404.html", data=pages.make.render("partials/errors/404.html", {}, env))
     pages.make.page("500.html", data=pages.make.render("partials/errors/500.html", {}, env))
 
-    # Create the search page
-    print("Making search page...")
-    render_opts = {
-        "hosts": [r["handle"] for r in api.get("hosts/")],
-    }
-    pages.make.page(
-        "search/index.html", data=pages.make.render("search/search.html", render_opts, env)
-    )
-
     # Create the about page
     print("Making about page...")
     pages.make.page("about/index.html", data=pages.make.render("root/about.html", {}, env))
@@ -168,6 +159,14 @@ def main() -> None:
     }
     pages.make.page("index.html", data=pages.make.render("root/index.html", render_opts, env))
 
+    # Create the search page
+    print("Making search page...")
+    render_opts = {
+        "hosts": [r["handle"] for r in api.get("hosts/")],
+    }
+    pages.make.page(
+        "search/index.html", data=pages.make.render("search/search.html", render_opts, env)
+    )
 
     # Provide a basic "how long did it run" recording
     total_time = time() - start_time
