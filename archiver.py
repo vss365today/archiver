@@ -1,3 +1,4 @@
+import json
 from datetime import date
 from pathlib import Path
 from time import time
@@ -172,7 +173,11 @@ def main() -> None:
     )
 
     print("Making searchable content...")
-    pages.make.page("static/js/prompts.js", data=pages.make.render("search/prompts.js", {}, env))
+    render_opts = {"prompts": json.dumps(all_prompts)}
+    pages.make.page(
+        "static/js/prompts.js", data=pages.make.render("search/prompts.js", render_opts, env)
+    )
+
 
 
     # Provide a basic "how long did it run" recording
