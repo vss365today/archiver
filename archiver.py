@@ -1,3 +1,4 @@
+import copy
 import json
 from datetime import date
 from pathlib import Path
@@ -112,7 +113,6 @@ def main() -> None:
     # Next, pull out the special One Year page, which is different from the rest
     print("Making One Year page...")
     one_year_prompt = api.get("prompts", "date", "2017-09-05")[0]
-    del all_prompts["2017-09-05"]
     render_opts = {
         "prompt": one_year_prompt,
         "previous": date.fromisoformat(one_year_prompt["navigation"]["previous"]),
@@ -124,6 +124,10 @@ def main() -> None:
 
     print("Making individual view pages...")
     for day, prompts in all_prompts.items():
+        # Skip One Year
+        if day == "2017-09-05":
+            continue
+
         # Create the required date object
         for prompt in prompts:
             prompt["date"] = date.fromisoformat(prompt["date"])
@@ -178,6 +182,7 @@ def main() -> None:
     # Add a pretty date field to each prompt
     for prompts in json_prompts.values():
         for p in prompts:
+            p["date"] = p["date"].isoformat() if isinstance(p["date"], date) else p["date"]
             p["pretty_date"] = filters.format_date_pretty(p["date"])
 
     render_opts = {"prompts": json.dumps(json_prompts)}
@@ -185,11 +190,9 @@ def main() -> None:
         "static/js/prompts.js", data=pages.make.render("search/prompts.js", render_opts, env)
     )
 
-
-
-    # Provide a basic "how long did it run" recording
+    # Provide a basic "how long did it run" message
     total_time = time() - start_time
-    print(f"{total_time}=")
+    print(f"Total generation time: {duration(total_time)}")
 
 
 if __name__ == "__main__":

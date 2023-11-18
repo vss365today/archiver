@@ -1,3 +1,4 @@
+import { addAlert } from "./alerts.js";
 // @ts-ignore
 import { searchData } from "./prompts.js";
 
@@ -20,7 +21,7 @@ function renderPrompts(prompts) {
 }
 
 function searchError(message) {
-  // TODO: Error message
+  addAlert("error", message);
   window.location = "/search";
 }
 
