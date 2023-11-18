@@ -1,0 +1,41 @@
+{% set page_title = "Search #vss365 prompts" %}
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page search-results center">
+  {#
+  {% if search_type == 'host' %}
+  <h2 class="center">{{ query }} has given us {{ total }} awesome {{ 'prompts' if total > 1 else 'prompt' }}!</h2>
+  {% else %}
+  <h2 class="center">Say "{{ query }}" {{ total }} {{ 'times fast' if total > 1 else 'time' }}. That's how cool the prompt is!</h2>
+  {% endif %}
+
+  <div class="wrapper">
+    {% for prompt in prompts %}
+    <dl>
+      <dd><a href="{{ url_for('root.view_date', d=prompt.date) }}">{{ prompt.word }}</a></dd>
+      <dt>{{ prompt.date|format_date_pretty }}</dt>
+      <dt>{{ prompt.host }}</dt>
+    </dl>
+    {%- if loop.index % 5 == 0 %}
+  </div>
+
+  <div class="wrapper">
+    {%- endif %}
+    {%- endfor %}
+  </div>
+  #}
+
+  {% include "partials/form-search.html" %}
+</section>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tail.select@0.5.22/css/modern/tail.select-light.min.css">
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/tail.select@0.5.22/js/tail.select.min.js"></script>
+<script type="module" src="{{ url_for('static', filename='js/search.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/search-results.js') }}"></script>
+{% endblock %}

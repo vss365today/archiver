@@ -159,13 +159,16 @@ def main() -> None:
     }
     pages.make.page("index.html", data=pages.make.render("root/index.html", render_opts, env))
 
-    # Create the search page
-    print("Making search page...")
+    # Create the search pages
+    print("Making search and search results pages...")
     render_opts = {
         "hosts": [r["handle"] for r in api.get("hosts/")],
     }
     pages.make.page(
         "search/index.html", data=pages.make.render("search/search.html", render_opts, env)
+    )
+    pages.make.page(
+        "search/results.html", data=pages.make.render("search/results.html", render_opts, env)
     )
 
     # Provide a basic "how long did it run" recording
