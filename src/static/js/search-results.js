@@ -64,7 +64,20 @@ function searchPrompts(query) {
       }
     });
   }
-  return foundPrompts;
+
+  return foundPrompts.sort((a, b) => {
+    // Word search is sorted alphabetically
+    let wordA = a.word.toLowerCase();
+    let wordB = b.word.toLowerCase();
+
+    if (wordA < wordB) {
+      return -1;
+    }
+    if (wordA > wordB) {
+      return 1;
+    }
+    return 0;
+  });
 }
 
 document.addEventListener("DOMContentLoaded", function (e) {
