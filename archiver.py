@@ -1,4 +1,5 @@
 from datetime import date
+from pathlib import Path
 from time import time
 from typing import Any
 
@@ -30,10 +31,14 @@ def main() -> None:
     ]
     pages.make.dist(prompt_years_months)
 
+    # Create error handling pages
+    print("Making error handling pages...")
+    pages.make.page("404.html", data=pages.make.render("partials/errors/404.html", {}, env))
+    pages.make.page("500.html", data=pages.make.render("partials/errors/500.html", {}, env))
+
     # Create the search page
     print("Making search page...")
     render_opts = {
-        "page_title": "Search #vss365 prompts",
         "hosts": [r["handle"] for r in api.get("hosts/")],
     }
     pages.make.page(
@@ -43,6 +48,22 @@ def main() -> None:
     # Create the about page
     print("Making about page...")
     pages.make.page("about/index.html", data=pages.make.render("root/about.html", {}, env))
+
+    # Create the root stats page
+    print("Making root stats page...")
+    pages.make.page(
+        "stats/index.html",
+        data=pages.make.render(
+            "stats/index.html",
+            {
+                "years": sorted(
+                    int(f.stem)
+                    for f in (Path() / "templates" / "stats" / "years").resolve().iterdir()
+                )
+            },
+            env,
+        ),
+    )
 
     # Make the root browse page
     print("Making root browse page...")
