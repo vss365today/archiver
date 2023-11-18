@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+{% set page_title = 'Wrapped 2022' %}
+{% from 'partials/stats_helpers.jinja2' import link_to_host, link_to_prompt %}
+
+
+{% block content %}
+<section class="page">
+  <h2 class="center">#vss365 Wrapped 2022</h2>
+
+  <div class="wrapper">
+    <p><strong>Note:</strong> "Media Prompts" are defined as having an image or video attached to the tweet. Embedded media, such as YouTube embeds, are not considered media prompts.</p>
+
+    <ul>
+      <li><strong>365</strong> prompts were given out</li>
+      <li><strong>1</strong> prompt reigned as the shortest prompt, with <strong>2 letters</strong></li>
+      <li><strong>2</strong> prompts tied for the longest prompt</li>
+      <li>The most common length of a prompt was <strong>5 letters</strong>, with <strong>79 prompts</strong></li>
+      <li>The average length of a prompt was <strong>6.1452 letters</strong></li>
+      <li>All <strong>26 letters</strong> of the English alphabet were used at least once</li>
+      <li>The most common letter was "<strong>e</strong>", with <strong>256 uses</strong></li>
+      <li>The letter used <strong>1 time</strong> was "<strong>j</strong>"</li>
+      <li>The least common letter was "<strong>z</strong>", with <strong>4 uses</strong></li>
+      <li>The most common starting letter was "<strong>s</strong>", with <strong>45 uses</strong></li>
+      <li>There were <strong>2 letters</strong> that were the least common starting letter</li>
+      <li>The most common ending letter was "<strong>e</strong>", with <strong>77 uses</strong></li>
+      <li>There were <strong>2 letters</strong> that were the least common ending letter</li>
+      <li><strong>4 prompts</strong> were repeated</li>
+      <li>There were <strong>165</strong> (<strong>45.2%</strong>) media prompts</li>
+      <li><strong>133</strong> (<strong>80.6%</strong>) media prompts did not have alt text to help visually impaired writers know what content or information the media portrayed</li>
+      <li><strong>9 hosts</strong> were veteran hosts</li>
+      <li><strong>15 hosts</strong> were first time hosts</li>
+    </ul>
+
+    <table class="table">
+      <caption>Shortest prompts</caption>
+      <tr>
+        <th>Prompt</th>
+        <th>Host</th>
+        <th>Date</th>
+      </tr>
+      <tr>
+        <td>go</td>
+        <td>{{ link_to_host('ArthurUnkTweets') }}</td>
+        <td>{{ link_to_prompt('2022-04-08') }}</td>
+      </tr>
+    </table>
+
+    <table class="table">
+      <caption>Longest prompts</caption>
+      <tr>
+        <th>Prompt</th>
+        <th>Host</th>
+        <th>Date</th>
+      </tr>
+      <tr>
+        <td>excommunicate</td>
+        <td>{{ link_to_host('writes_jo') }}</td>
+        <td>{{ link_to_prompt('2022-03-03') }}</td>
+      </tr>
+      <tr>
+        <td>materfamilias</td>
+        <td>{{ link_to_host('DesiWilloughby') }}</td>
+        <td>{{ link_to_prompt('2022-07-15') }}</td>
+      </tr>
+    </table>
+
+    <table class="table">
+      <caption>Repeated prompts</caption>
+      <tr>
+        <th>Prompt</th>
+        <th>Occurrences</th>
+      </tr>
+      <tr>
+        <td>maniac</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>mine</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>racket</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>tear</td>
+        <td>2</td>
+      </tr>
+    </table>
+
+    <table class="table">
+      <caption>Least common starting letters</caption>
+      <tr>
+        <th>Letter</th>
+        <th>Occurrences</th>
+      </tr>
+      <tr>
+        <td>v</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>q</td>
+        <td>2</td>
+      </tr>
+    </table>
+
+    <table class="table">
+      <caption>Least common ending letters</caption>
+      <tr>
+        <th>Letter</th>
+        <th>Occurrences</th>
+      </tr>
+      <tr>
+        <td>i</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>x</td>
+        <td>2</td>
+      </tr>
+    </table>
+
+    <table class="table">
+      <caption>
+        Prompt lengths and occurrences
+        <span class="subcaption">Ordered by most common occurrence first</span>
+      </caption>
+      <tr>
+        <th>Number of letters</th>
+        <th>Prompts</th>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>79</td>
+        <tr>
+          <td>4</td>
+          <td>69</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>62</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>50</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>34</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>22</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>20</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>17</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>7</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>1</td>
+        </tr>
+      </tr>
+    </table>
+
+    <table class="table">
+      <caption>
+        Average number of letters in each prompt for each host
+        <span class="subcaption">Ordered by largest average length first</span>
+      </caption>
+      <tr>
+        <th>Host</th>
+        <th>Average letters in prompts</th>
+      </tr>
+      <tr>
+        <td>cely717</td>
+        <td>8.25</td>
+      </tr>
+      <tr>
+        <td>Nina7Infinity</td>
+        <td>7.6667</td>
+      </tr>
+      <tr>
+        <td>writes_jo</td>
+        <td>7.4667</td>
+      </tr>
+      <tr>
+        <td>DesiWilloughby</td>
+        <td>7.0667</td>
+      </tr>
+      <tr>
+        <td>bofferson</td>
+        <td>7.0667</td>
+      </tr>
+      <tr>
+        <td>JRBournville</td>
+        <td>6.7333</td>
+      </tr>
+      <tr>
+        <td>WritingDreamer</td>
+        <td>6.6</td>
+      </tr>
+      <tr>
+        <td>SimonPsychosis</td>
+        <td>6.5714</td>
+      </tr>
+      <tr>
+        <td>ESWarriorPoet</td>
+        <td>6.5333</td>
+      </tr>
+      <tr>
+      </tr>
+        <td>silveringofrose</td>
+        <td>6.25</td>
+      </tr>
+      <tr>
+        <td>OminousHallways</td>
+        <td>6.2</td>
+      </tr>
+      <tr>
+        <td>LV_matthews</td>
+        <td>6.1875</td>
+      </tr>
+      <tr>
+        <td>SobrietyStories</td>
+        <td>6.1429</td>
+      </tr>
+      <tr>
+        <td>TheSurrealAri</td>
+        <td>6.0667</td>
+      </tr>
+      <tr>
+        <td>nreillyjohnson</td>
+        <td>5.8667</td>
+      </tr>
+      <tr>
+        <td>ArthurUnkTweets</td>
+        <td>5.8</td>
+      </tr>
+      <tr>
+        <td>LadySabrielle</td>
+        <td>5.625</td>
+      </tr>
+      <tr>
+        <td>teabeesea</td>
+        <td>5.625</td>
+      </tr>
+      <tr>
+        <td>TunnelroadUS</td>
+        <td>5.6</td>
+      </tr>
+      <tr>
+        <td>Brennan_and_Riz</td>
+        <td>5.2</td>
+      </tr>
+      <tr>
+        <td>hungryghostpoet</td>
+        <td>5.1333</td>
+      </tr>
+      <tr>
+        <td>writerzoe</td>
+        <td>4.875</td>
+      </tr>
+      <tr>
+        <td>DanielC55186873</td>
+        <td>4.6667</td>
+      </tr>
+      <tr>
+        <td>KelvinROfficial</td>
+        <td>4.4375</td>
+      </tr>
+    </table>
+
+    <table class="table">
+      <caption>Veteran hosts</caption>
+      <tr>
+        <th>Host</th>
+        <th>Hosting period start date</th>
+      </tr>
+      <tr>
+        <td>LadySabrielle</td>
+        <td>{{ '2022-01-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>writerzoe</td>
+        <td>{{ '2022-03-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>ArthurUnkTweets</td>
+        <td>{{ '2022-04-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>ESWarriorPoet</td>
+        <td>{{ '2022-05-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>cely717</td>
+        <td>{{ '2022-05-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>WritingDreamer</td>
+        <td>{{ '2022-06-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>KelvinROfficial</td>
+        <td>{{ '2022-07-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>nreillyjohnson</td>
+        <td>{{ '2022-09-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>LV_matthews</td>
+        <td>{{ '2022-10-16'|format_date_pretty }}</td>
+      </tr>
+    </table>
+
+    <table class="table">
+      <caption>First time hosts</caption>
+      <tr>
+        <th>Host</th>
+        <th>Hosting period start date</th>
+      </tr>
+      <tr>
+        <td>Nina7Infinity</td>
+        <td>{{ '2022-01-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>SimonPsychosis</td>
+        <td>{{ '2022-02-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>SobrietyStories</td>
+        <td>{{ '2022-02-15'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>writes_jo</td>
+        <td>{{ '2022-03-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>JRBournville</td>
+        <td>{{ '2022-04-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>TunnelroadUS</td>
+        <td>{{ '2022-06-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>DesiWilloughby</td>
+        <td>{{ '2022-07-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>OminousHallways</td>
+        <td>{{ '2022-08-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>silveringofrose</td>
+        <td>{{ '2022-08-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>DanielC55186873</td>
+        <td>{{ '2022-09-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>TheSurrealAri</td>
+        <td>{{ '2022-10-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>bofferson</td>
+        <td>{{ '2022-11-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>hungryghostpoet</td>
+        <td>{{ '2022-11-16'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>Brennan_and_Riz</td>
+        <td>{{ '2022-12-01'|format_date_pretty }}</td>
+      </tr>
+      <tr>
+        <td>teabeesea</td>
+        <td>{{ '2022-12-16'|format_date_pretty }}</td>
+      </tr>
+    </table>
+  </div>
+</section>
+{% endblock %}

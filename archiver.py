@@ -51,19 +51,20 @@ def main() -> None:
 
     # Create the root stats page
     print("Making root stats page...")
-    pages.make.page(
-        "stats/index.html",
-        data=pages.make.render(
-            "stats/index.html",
-            {
-                "years": sorted(
-                    int(f.stem)
-                    for f in (Path() / "templates" / "stats" / "years").resolve().iterdir()
-                )
-            },
-            env,
-        ),
+    stats_years = sorted(
+        int(f.stem) for f in (Path() / "templates" / "stats" / "years").resolve().iterdir()
     )
+    pages.make.page(
+        "stats/index.html", data=pages.make.render("stats/index.html", {"years": stats_years}, env)
+    )
+
+    # Create the individual stats pages
+    print("Making individual stats pages...")
+    for year in stats_years:
+        print(f"Making stats page for {year}...")
+        pages.make.page(
+            f"stats/{year}.html", data=pages.make.render(f"stats/years/{year}.html", {}, env)
+        )
 
     # Make the root browse page
     print("Making root browse page...")
