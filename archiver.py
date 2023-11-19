@@ -17,7 +17,7 @@ def main() -> None:
 
     # Start by creating a Jinja2 renderer
     env = Environment(
-        loader=PackageLoader("archiver", "templates"),
+        loader=PackageLoader("archiver", "src", "templates"),
         autoescape=select_autoescape(["html"]),
     )
 
