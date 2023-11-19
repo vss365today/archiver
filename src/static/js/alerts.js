@@ -7,7 +7,21 @@ export function addAlert(level, message) {
   sessionStorage.setItem("alerts", JSON.stringify(alerts));
 }
 
-export function renderAlerts() {}
+export function renderAlerts() {
+  let alertsRaw = sessionStorage.getItem("alerts");
+  let alerts = alertsRaw === null ? [] : JSON.parse(alertsRaw);
+
+  alerts.forEach(v => {
+    let msg = `<div class="msg-alert ${v.level}" role="alert">
+      <p>${v.message}</p>
+      <img class="btn-close" width="25" height="25" alt="" src="/static/img/close.svg">
+    </div>`;
+    qAreaAlerts?.insertAdjacentHTML("beforeend", msg);
+  });
+
+  // Remove the alerts afer showing them
+  sessionStorage.setItem("alerts", JSON.stringify([]));
+}
 
 qAreaAlerts?.addEventListener("click", function (e) {
   // Did we click the close button on an alert?
@@ -22,3 +36,5 @@ qAreaAlerts?.addEventListener("click", function (e) {
     }
   }
 });
+
+document.addEventListener("DOMContentLoaded", renderAlerts);
