@@ -16,7 +16,7 @@ export function renderAlerts() {
       <p>${v.message}</p>
       <img class="btn-close" width="25" height="25" alt="" src="/static/img/close.svg">
     </div>`;
-    qAreaAlerts?.insertAdjacentHTML("beforeend", msg);
+    qAreaAlerts?.insertAdjacentHTML("afterbegin", msg);
   });
 
   // Remove the alerts afer showing them
