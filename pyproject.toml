@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vss365today-archiver"
-version = "0.1.0"
+version = "1.0.0"
 description = "Static file generator and archiver for #vss365 today"
 authors = ["Caleb <le717@users.noreply.github.com>"]
 license = "MIT"
