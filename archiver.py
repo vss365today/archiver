@@ -8,7 +8,7 @@ from typing import Any
 from httpx import HTTPError
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-from src.core import api, context_vars, filters, pages
+from src.core import api, context_vars, filters, make
 from src.core.helpers import duration
 
 
@@ -31,33 +31,29 @@ def main() -> None:
     prompt_years_months = [
         {str(year): api.get("browse", "years", str(year))["months"]} for year in prompt_years
     ]
-    pages.make.dist(prompt_years_months)
+    make.dist(prompt_years_months)
 
     # Create error handling pages
     print("Making error handling pages...")
-    pages.make.page("404.html", data=pages.make.render("partials/errors/404.html", {}, env))
-    pages.make.page("500.html", data=pages.make.render("partials/errors/500.html", {}, env))
+    make.page("404.html", data=make.render("partials/errors/404.html", {}, env))
+    make.page("500.html", data=make.render("partials/errors/500.html", {}, env))
 
     # Create the about page
     print("Making about page...")
-    pages.make.page("about/index.html", data=pages.make.render("root/about.html", {}, env))
+    make.page("about/index.html", data=make.render("root/about.html", {}, env))
 
     # Create the root stats page
     print("Making root stats page...")
     stats_years = sorted(
         int(f.stem) for f in (Path() / "templates" / "stats" / "years").resolve().iterdir()
     )
-    pages.make.page(
-        "stats/index.html", data=pages.make.render("stats/index.html", {"years": stats_years}, env)
-    )
+    make.page("stats/index.html", data=make.render("stats/index.html", {"years": stats_years}, env))
 
     # Create the individual stats pages
     print("Making individual stats pages...")
     for year in stats_years:
         print(f"Making stats page for {year}...")
-        pages.make.page(
-            f"stats/{year}.html", data=pages.make.render(f"stats/years/{year}.html", {}, env)
-        )
+        make.page(f"stats/{year}.html", data=make.render(f"stats/years/{year}.html", {}, env))
 
     # Make the root browse page
     print("Making root browse page...")
@@ -65,11 +61,9 @@ def main() -> None:
         archive_name = api.get("archive/")
     except HTTPError:
         archive_name = None
-    pages.make.page(
+    make.page(
         "browse/index.html",
-        data=pages.make.render(
-            "root/browse.html", {"years": prompt_years, "archive": archive_name}, env
-        ),
+        data=make.render("root/browse.html", {"years": prompt_years, "archive": archive_name}, env),
     )
 
     # We're going to be fetching all of the prompts shortly. Might as well be
@@ -82,9 +76,9 @@ def main() -> None:
 
             # Create an index page for each year
             print(f"Making index for {year}...")
-            pages.make.page(
+            make.page(
                 f"browse/{year}/index.html",
-                data=pages.make.render(
+                data=make.render(
                     "root/browse-year.html", {"year": year, "months": month_objs}, env
                 ),
             )
@@ -101,9 +95,9 @@ def main() -> None:
                     all_prompts[p["date"]].append(p)
 
                 # Actually, finally, make the dang page
-                pages.make.page(
+                make.page(
                     f"browse/{year}/{date_obj.month}/index.html",
-                    data=pages.make.render(
+                    data=make.render(
                         "root/browse-month.html",
                         {"date": date_obj, "month_prompts": prompts_in_month},
                         env,
@@ -118,9 +112,7 @@ def main() -> None:
         "previous": date.fromisoformat(one_year_prompt["navigation"]["previous"]),
         "next": date.fromisoformat(one_year_prompt["navigation"]["next"]),
     }
-    pages.make.page(
-        "view/2017-09-05.html", data=pages.make.render("root/one-year.html", render_opts, env)
-    )
+    make.page("view/2017-09-05.html", data=make.render("root/one-year.html", render_opts, env))
 
     print("Making individual view pages...")
     for day, prompts in all_prompts.items():
@@ -146,9 +138,7 @@ def main() -> None:
                 else None
             ),
         }
-        pages.make.page(
-            f"view/{day}.html", data=pages.make.render("root/index.html", render_opts, env)
-        )
+        make.page(f"view/{day}.html", data=make.render("root/index.html", render_opts, env))
 
     # Next, we are going to generate a site index, which is the newest prompt
     print("Making site index...")
@@ -162,19 +152,15 @@ def main() -> None:
         ),
         "next": None,
     }
-    pages.make.page("index.html", data=pages.make.render("root/index.html", render_opts, env))
+    make.page("index.html", data=make.render("root/index.html", render_opts, env))
 
     # Create the search pages
     print("Making search and search results pages...")
     render_opts = {
         "hosts": [r["handle"] for r in api.get("hosts/")],
     }
-    pages.make.page(
-        "search/index.html", data=pages.make.render("search/search.html", render_opts, env)
-    )
-    pages.make.page(
-        "search/results.html", data=pages.make.render("search/results.html", render_opts, env)
-    )
+    make.page("search/index.html", data=make.render("search/search.html", render_opts, env))
+    make.page("search/results.html", data=make.render("search/results.html", render_opts, env))
 
     print("Making searchable content...")
     json_prompts = copy.deepcopy(all_prompts)
@@ -186,9 +172,7 @@ def main() -> None:
             p["pretty_date"] = filters.format_date_pretty(p["date"])
 
     render_opts = {"prompts": json.dumps(json_prompts)}
-    pages.make.page(
-        "static/js/prompts.js", data=pages.make.render("search/prompts.js", render_opts, env)
-    )
+    make.page("static/js/prompts.js", data=make.render("search/prompts.js", render_opts, env))
 
     # Provide a basic "how long did it run" message
     total_time = time() - start_time

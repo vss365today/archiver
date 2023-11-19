@@ -1,4 +1,3 @@
-import json
 import shutil
 from os import fspath
 from pathlib import Path
@@ -7,7 +6,7 @@ import sys_vars
 from jinja2 import Environment
 
 
-__all__ = ["dist", "render", "page", "search_json"]
+__all__ = ["dist", "render", "page"]
 
 
 def dist(dir_names: list[dict[str, list[int]]]) -> None:
@@ -37,17 +36,3 @@ def render(name: str, render_opts: dict, jinja: Environment) -> str:
 
 def page(*args: str, data: str = "") -> None:
     (sys_vars.get_path("DIST_PATH").joinpath(*args)).write_bytes(data.encode())
-
-
-def search_json(data: dict) -> None:
-    json_file = sys_vars.get_path("DIST_PATH") / "js" / "prompts.js"
-    str_data = json.dumps(data)
-
-    # After we stringify the JSON data, append the following
-    # ES Module export defaults so we can load it as
-    # an ES module and search on the data way more easily.
-    # This is D U M B but it works
-    # TODO: This has been fixed and you can now import json files.
-    # Do that instead
-    str_data = f"export default {str_data}"
-    json_file.write_text(str_data)
