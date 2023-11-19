@@ -168,7 +168,21 @@ def main() -> None:
     # Add a pretty date field to each prompt
     for prompts in json_prompts.values():
         for p in prompts:
+            # Remove data that doesn't need to go to the page
+            del p["_id"]
+            del p["content"]
+            del p["date_added"]
+            del p["host"]["twitter_uid"]
+            del p["host"]["url"]
+            del p["media"]
+            del p["navigation"]
+            del p["twitter_id"]
+            del p["url"]
+
+            # Make sure we only have string dates
             p["date"] = p["date"].isoformat() if isinstance(p["date"], date) else p["date"]
+
+            # Add a pretty date so we don't have to do it in JS
             p["pretty_date"] = filters.format_date_pretty(p["date"])
 
     render_opts = {"prompts": json.dumps(json_prompts)}
