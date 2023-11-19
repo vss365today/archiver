@@ -6,7 +6,7 @@ function renderPrompts(prompts) {
   let finalHTML = ['<div class="wrapper">'];
   prompts.forEach((prompt, i) => {
     let t = `<dl>
-      <dd><a href="{{ url_for('root.view_date', d=prompt.date) }}">${prompt.word}</a></dd>
+      <dd><a href="/view/${prompt.date}">${prompt.word}</a></dd>
       <dt>${prompt.pretty_date}</dt>
       <dt>${prompt.host.handle}</dt>
     </dl>`;
