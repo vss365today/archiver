@@ -17,7 +17,7 @@ def main() -> None:
 
     # Start by creating a Jinja2 renderer
     env = Environment(
-        loader=PackageLoader("archiver", "src", "templates"),
+        loader=PackageLoader("src", "templates"),
         autoescape=select_autoescape(["html"]),
     )
 
@@ -45,7 +45,7 @@ def main() -> None:
     # Create the root stats page
     print("Making root stats page...")
     stats_years = sorted(
-        int(f.stem) for f in (Path() / "templates" / "stats" / "years").resolve().iterdir()
+        int(f.stem) for f in (Path() / "src" / "templates" / "stats" / "years").resolve().iterdir()
     )
     make.page("stats/index.html", data=make.render("stats/index.html", {"years": stats_years}, env))
 
